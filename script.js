@@ -68,8 +68,24 @@ function verwerk(j){
                     }
                 break;
             case 'relation':
-                if(!(x.id in osm.relations) && isPerceel(x)){
-                    console.log(x);
+                if(!(x.id in osm.relations) && 'members' in x){
+                    rs = {};
+                    rs.outer = [];
+                    rs.inner = [];
+                    for (const m of x.members){
+                        if(type=='way'){
+                            var ps = [];
+                            for (const i of osm.ways[m.ref].nodes){
+                                let p = osm.nodes[i];
+                                ps.push([p.getLatLng().lat, p.getLatLng().lng]);
+                            }
+                        rs[m.role].push(ps);
+                        }
+                    }
+                    let y = [rs.outer, rs.inner];
+                    let lir = L.polygon(y.flat(), {color: 'purple'});
+                    if(isPerceel(x)){lir.addTo(map);}
+                    osm.relations[x.id] = lir;
                 }
 
                 break;
