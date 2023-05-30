@@ -83,6 +83,7 @@ function verwerk(j){
                                 //let p = osm.nodes[i];
                                 //console.log(i);
                                 var pis = [];
+                                console.log(p);
                                 for (const pi of p.getLatLngs()){
                                 pis.push([pi.getLatLng().lat, pi.getLatLng().lng]);
                                 }
