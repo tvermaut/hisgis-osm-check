@@ -13,6 +13,7 @@ document.getElementById("checkvenster").onclick = async function(){
     const response = await fetch(url);
     const jsonData = await response.json();
     verwerk(jsonData);
+    console.log(jsonData);
 }
 
 class OSM{
@@ -32,8 +33,7 @@ function verwerk(j){
         switch (x.type) {
             case 'node':
                 if(!(x.id in osm.nodes)){
-                    let lin = L.circleMarker(L.latLng(x.lat, x.lon), 10);
-                    lin.addTo(map);
+                    let lin = L.circleMarker(L.latLng(x.lat, x.lon), 10).addTo(map);
                     osm.nodes[x.id] = lin;
                     }
                 break;
@@ -46,15 +46,22 @@ function verwerk(j){
                             let p = osm.nodes[i];
                             ps.push([p.getLatLng().lat, p.getLatLng().lng]);
                         }
-                        console.log(ps);
-                        let liw = L.polygon(ps, {color: 'red'});
-                        console.log(liw);
-                        liw.addTo(map)
+                        let liw = L.polygon(ps, {color: 'red'}).addTo(map)
                         osm.ways[x.id] = liw;
                     } else {
                         // open lijn
+                        var ps = [];
+                        for (const i of x.nodes){
+                            let p = osm.nodes[i];
+                            ps.push([p.getLatLng().lat, p.getLatLng().lng]);
+                        }
+                        let liw = L.polyline(ps, {color: 'green'}).addTo(map)
+                        osm.ways[x.id] = liw;
                         }
                     }
+                break;
+            case 'relation':
+
                 break;
             default:
                 break;
