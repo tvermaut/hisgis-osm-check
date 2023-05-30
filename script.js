@@ -13,7 +13,7 @@ document.getElementById("checkvenster").onclick = async function(){
     const response = await fetch(url);
     const jsonData = await response.json();
     verwerk(jsonData);
-    console.log(jsonData);
+    //console.log(jsonData);
 }
 
 class OSM{
@@ -27,18 +27,22 @@ class OSM{
 
 var osm = new OSM()
 
+function isPerceel(x){
+    return 'tags' in x && 'kad:gemeente' in x.tags && 'kad:perceelnr' in x.tags
+}
+
 function verwerk(j){
-    console.log(j)
+    //console.log(j)
     for (const x of j.elements){
         switch (x.type) {
             case 'node':
-                if(!(x.id in osm.nodes)){
+                if(!(x.id in osm.nodes) && isPerceel(x)){
                     let lin = L.circleMarker(L.latLng(x.lat, x.lon), 10).addTo(map);
                     osm.nodes[x.id] = lin;
                     }
                 break;
             case 'way':
-                if(!(x.id in osm.ways)){
+                if(!(x.id in osm.ways) && isPerceel(x)){
                     if(x.nodes[0] == x.nodes[x.nodes.length -1]){
                         // gesloten vlak
                         var ps = [];
@@ -61,6 +65,9 @@ function verwerk(j){
                     }
                 break;
             case 'relation':
+                if(!(x.id in osm.relations) && isPerceel(x)){
+                    console.log(x);
+                }
 
                 break;
             default:
