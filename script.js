@@ -43,7 +43,7 @@ function verwerk(j){
                         let p = osm.nodes[i];
                         ps.push([p.getLatLng().lat, p.getLatLng().lng])
                     }
-                    let liw = L.Polygon(ps);
+                    let liw = L.Polygon(ps, {color: 'red'}).addTo(map);
                     liw.addTo(map)
                     osm.lines[x.id] = liw;
                 } else {
