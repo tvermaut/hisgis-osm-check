@@ -31,26 +31,31 @@ function verwerk(j){
     for (const x of j.elements){
         switch (x.type) {
             case 'node':
-                let lin = L.circleMarker(L.latLng(x.lat, x.lon), 10);
-                lin.addTo(map);
-                osm.nodes[x.id] = lin;
+                if(!(x.id in osm.nodes)){
+                    let lin = L.circleMarker(L.latLng(x.lat, x.lon), 10);
+                    lin.addTo(map);
+                    osm.nodes[x.id] = lin;
+                    }
                 break;
             case 'way':
-                if(x.nodes[0] == x.nodes[x.nodes.length -1]){
-                    // gesloten vlak
-                    var ps = [];
-                    for (const i of x.nodes){
-                        let p = osm.nodes[i];
-                        ps.push([p.getLatLng().lat, p.getLatLng().lng]);
+                if(!(x.id in osm.ways)){
+                    if(x.nodes[0] == x.nodes[x.nodes.length -1]){
+                        // gesloten vlak
+                        var ps = [];
+                        for (const i of x.nodes){
+                            let p = osm.nodes[i];
+                            ps.push([p.getLatLng().lat, p.getLatLng().lng]);
+                        }
+                        console.log(ps);
+                        let liw = L.polygon(ps, {color: 'red'});
+                        console.log(liw);
+                        liw.addTo(map)
+                        osm.ways[x.id] = liw;
+                    } else {
+                        // open lijn
+                        }
                     }
-                    console.log(ps);
-                    let liw = L.polygon(ps, {color: 'red'});
-                    console.log(liw);
-                    liw.addTo(map)
-                    osm.ways[x.id] = liw;
-                } else {
-                    // open lijn
-                }
+                break;
             default:
                 break;
         }
