@@ -4,7 +4,7 @@ L.tileLayer('https://hisgis.nl/wmts/minuutplans/cut/{z}/{x}/{y}', {
     attribution: 'HisGIS'
 }).addTo(map);
 
-document.getElementById("checkvenster").onclick = function(){
+document.getElementById("checkvenster").onclick = async function(){
     let url = "https://osm.hisgis.nl/api/0.6/map.json?bbox=";
     url += map.getBounds().toBBoxString();
     document.getElementById("bericht").innerHTML += map.getBounds().toBBoxString();
