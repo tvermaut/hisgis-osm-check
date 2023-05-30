@@ -27,6 +27,7 @@ class OSM{
 var osm = new OSM()
 
 function verwerk(j){
+    console.log(j)
     for (const x of j.elements){
         switch (x.type) {
             case 'node':
@@ -36,6 +37,5 @@ function verwerk(j){
             default:
                 break;
         }
-        osm.nodes.push()
     }
 }
