@@ -36,13 +36,14 @@ function verwerk(j){
     for (const x of j.elements){
         switch (x.type) {
             case 'node':
-                if(!(x.id in osm.nodes) && isPerceel(x)){
-                    let lin = L.circleMarker(L.latLng(x.lat, x.lon), 10).addTo(map);
-                    osm.nodes[x.id] = lin;
-                    }
+                if(!(x.id in osm.nodes)) {
+                let lin = L.circleMarker(L.latLng(x.lat, x.lon), 10);
+                if(isPerceel(x)){lin.addTo(map);}
+                osm.nodes[x.id] = lin;
+                }
                 break;
             case 'way':
-                if(!(x.id in osm.ways) && isPerceel(x)){
+                if(!(x.id in osm.ways) ){
                     if(x.nodes[0] == x.nodes[x.nodes.length -1]){
                         // gesloten vlak
                         var ps = [];
@@ -50,7 +51,8 @@ function verwerk(j){
                             let p = osm.nodes[i];
                             ps.push([p.getLatLng().lat, p.getLatLng().lng]);
                         }
-                        let liw = L.polygon(ps, {color: 'red'}).addTo(map)
+                        let liw = L.polygon(ps, {color: 'red'});
+                        if(isPerceel(x)){liw.addTo(map);}
                         osm.ways[x.id] = liw;
                     } else {
                         // open lijn
@@ -60,6 +62,7 @@ function verwerk(j){
                             ps.push([p.getLatLng().lat, p.getLatLng().lng]);
                         }
                         let liw = L.polyline(ps, {color: 'green'}).addTo(map)
+                        if(isPerceel(x)){liw.addTo(map);}
                         osm.ways[x.id] = liw;
                         }
                     }
