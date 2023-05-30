@@ -76,24 +76,28 @@ function verwerk(j){
                     rs.inner = [];
                     for (const m of x.members){
                         if(m.type=='way'){
-                            var ps = [];
-                            var w = osm.ways[m.ref];
-                            console.log(w);
-                            console.log("m:");
-                            console.log(m);
-                            console.log("x:");
-                            console.log(x);
-                            for (const p of w.getLatLngs()){
-                                //let p = osm.nodes[i];
-                                //console.log(i);
-                                var pis = [];
-                                console.log(p);
-                                for (const pi of p){
-                                pis.push([pi.lat, pi.lng]);
+                                if(m.ref in osm.ways){
+                                var ps = [];
+                                var w = osm.ways[m.ref];
+                                console.log(w);
+                                console.log("m:");
+                                console.log(m);
+                                console.log("x:");
+                                console.log(x);
+                                for (const p of w.getLatLngs()){
+                                    //let p = osm.nodes[i];
+                                    //console.log(i);
+                                    var pis = [];
+                                    console.log(p);
+                                    for (const pi of p){
+                                    pis.push([pi.lat, pi.lng]);
+                                    }
+                                    ps.push(pis);
                                 }
-                                ps.push(pis);
+                            rs[m.role].push(ps);
+                            } else {
+                                console.log("way met id " + m.ref + " niet gevonden.");
                             }
-                        rs[m.role].push(ps);
                         }
                     }
                     let y = [rs.outer, rs.inner];
