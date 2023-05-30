@@ -31,7 +31,9 @@ function verwerk(j){
     for (const x of j.elements){
         switch (x.type) {
             case 'node':
-                osm.nodes[x.id] = L.circleMarker(L.latLng(x.lat, x.lon), 10);
+                let lin = L.circleMarker(L.latLng(x.lat, x.lon), 10);
+                lin.addTo(map);
+                osm.nodes[x.id] = lin;
                 break;
         
             default:
