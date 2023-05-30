@@ -75,7 +75,7 @@ function verwerk(j){
                     for (const m of x.members){
                         if(m.type=='way'){
                             var ps = [];
-                            for (const i of osm.ways[m.ref].nodes){
+                            for (const i of osm.ways[m.ref].getLatLngs()){
                                 let p = osm.nodes[i];
                                 ps.push([p.getLatLng().lat, p.getLatLng().lng]);
                             }
