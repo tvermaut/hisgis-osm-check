@@ -63,7 +63,7 @@ function verwerk(j){
                             let p = osm.nodes[i];
                             ps.push([p.getLatLng().lat, p.getLatLng().lng]);
                         }
-                        let liw = L.polyline(ps, {color: 'green'}).addTo(map)
+                        let liw = L.polyline(ps, {color: 'green'});
                         if(isPerceel(x)){liw.addTo(map);}
                         osm.ways[x.id] = liw;
                         }
@@ -77,7 +77,9 @@ function verwerk(j){
                     for (const m of x.members){
                         if(m.type=='way'){
                             var ps = [];
-                            for (const i of (osm.ways[m.ref]).getLatLngs()){
+                            var w = osm.ways[m.ref];
+                            console.log(w);
+                            for (const i of w.getLatLngs()){
                                 let p = osm.nodes[i];
                                 console.log(i);
                                 ps.push([p.getLatLng().lat, p.getLatLng().lng]);
