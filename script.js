@@ -41,7 +41,7 @@ function verwerk(j){
                     var ps = []
                     for (const i of x.nodes){
                         let p = osm.nodes[i];
-                        ps.append([p.getLatLng().lat, p.getLatLng().lng])
+                        ps.push([p.getLatLng().lat, p.getLatLng().lng])
                     }
                     let liw = L.Polygon(ps);
                     liw.addTo(map)
