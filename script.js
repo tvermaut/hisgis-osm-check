@@ -44,7 +44,7 @@ function verwerk(j){
                         ps.push([p.getLatLng().lat, p.getLatLng().lng]);
                     }
                     console.log(ps);
-                    let liw = L.Polygon(ps, {color: 'red'});
+                    let liw = L.polygon(ps, {color: 'red'});
                     console.log(liw);
                     liw.addTo(map)
                     osm.ways[x.id] = liw;
