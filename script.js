@@ -82,7 +82,11 @@ function verwerk(j){
                             for (const p of w.getLatLngs()){
                                 //let p = osm.nodes[i];
                                 //console.log(i);
-                                ps.push([p.getLatLng().lat, p.getLatLng().lng]);
+                                var pis = [];
+                                for (const pi of p.getLatLngs()){
+                                pis.push([pi.getLatLng().lat, pi.getLatLng().lng]);
+                                }
+                                ps.push(pis);
                             }
                         rs[m.role].push(ps);
                         }
