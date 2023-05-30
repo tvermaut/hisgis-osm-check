@@ -73,7 +73,7 @@ function verwerk(j){
                     rs.outer = [];
                     rs.inner = [];
                     for (const m of x.members){
-                        if(type=='way'){
+                        if(m.type=='way'){
                             var ps = [];
                             for (const i of osm.ways[m.ref].nodes){
                                 let p = osm.nodes[i];
