@@ -38,7 +38,12 @@ function verwerk(j){
             case 'way':
                 if(x.nodes[0] == x.nodes[x.nodes.length -1]){
                     // gesloten vlak
-                    let liw = L.Polygon(x.nodes.map(p => [p.getLatLng().lat, p.getLatLng().lng] ));
+                    var ps = []
+                    for (const i of x.nodes){
+                        let p = osm.nodes[i];
+                        ps.append([p.getLatLng().lat, p.getLatLng().lng])
+                    }
+                    let liw = L.Polygon(ps);
                     liw.addTo(map)
                     osm.lines[x.id] = liw;
                 } else {
