@@ -1,4 +1,5 @@
 #map {
+    position: absolute;
     height: 100%;
     width:80%;
     left:0px;
@@ -6,6 +7,7 @@
 }
 
 #messages {
+    position: absolute;
     height:100%;
     width:80%;
     top:0px;
