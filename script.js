@@ -26,13 +26,15 @@ class OSM{
 }
 
 var osm = new OSM()
+var jsonget;
 
 function isPerceel(x){
     return 'tags' in x && 'kad:gemeente' in x.tags && 'kad:sectie' in x.tags
 }
 
 function verwerk(j){
-    //console.log(j)
+    console.log(j)
+    jsonget = j;
     for (const x of j.elements){
         switch (x.type) {
             case 'node':
