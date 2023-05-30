@@ -85,7 +85,7 @@ function verwerk(j){
                                 var pis = [];
                                 console.log(p);
                                 for (const pi of p){
-                                pis.push([pi.getLatLng().lat, pi.getLatLng().lng]);
+                                pis.push([pi.lat, pi.lng]);
                                 }
                                 ps.push(pis);
                             }
