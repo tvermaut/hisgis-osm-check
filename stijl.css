@@ -1,1 +1,13 @@
-#map { height: 180px; }
+#map {
+    height: 100%;
+    width:80%;
+    left:0px;
+    top:0px;
+}
+
+#messages {
+    height:100%;
+    width:80%;
+    top:0px;
+    right:0px;
+}
