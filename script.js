@@ -79,6 +79,7 @@ function verwerk(j){
                             var ps = [];
                             for (const i of (osm.ways[m.ref]).getLatLngs()){
                                 let p = osm.nodes[i];
+                                console.log(p);
                                 ps.push([p.getLatLng().lat, p.getLatLng().lng]);
                             }
                         rs[m.role].push(ps);
