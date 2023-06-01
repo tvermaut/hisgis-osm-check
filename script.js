@@ -9,7 +9,7 @@ L.tileLayer('https://hisgis.nl/wmts/minuutplans/cut/{z}/{x}/{y}', {
 document.getElementById("checkvenster").onclick = async function(){
     let url = "https://osm.hisgis.nl/api/0.6/map.json?bbox=";
     url += map.getBounds().toBBoxString();
-    document.getElementById("bericht").innerHTML += map.getBounds().toBBoxString();
+    //document.getElementById("bericht").innerHTML += map.getBounds().toBBoxString();
     const response = await fetch(url);
     const jsonData = await response.json();
     verwerk(jsonData);
@@ -81,27 +81,28 @@ function verwerk(j){
                     for (const m of x.members){
                         if(m.type=='way'){
                                 if(m.ref in osm.ways){
-                                var ps = [];
-                                var w = osm.ways[m.ref];
-                                console.log(w);
-                                console.log("m:");
-                                console.log(m);
-                                console.log("x:");
-                                console.log(x);
-                                for (const p of w.getLatLngs()){
-                                    //let p = osm.nodes[i];
-                                    //console.log(i);
-                                    var pis = [];
-                                    console.log(p);
-                                    for (const pi of p){
-                                    pis.push([pi.lat, pi.lng]);
+                                    var ps = [];
+                                    var w = osm.ways[m.ref];
+                                    for (const p of w.getLatLngs()){
+                                        //let p = osm.nodes[i];
+                                        //console.log(i);
+                                        var pis = [];
+                                        //console.log(p);
+                                        for (const pi of p){
+                                        pis.push([pi.lat, pi.lng]);
+                                        }
+                                        ps.push(pis);
                                     }
-                                    ps.push(pis);
+                                rs[m.role].push(ps);
+                                } else {
+                                    // member-way niet aanwezig als lid van relatie; ophalen
+                                    let url = "https://osm.hisgis.nl/api/0.6/way/#" + m.ref + ".json";
+                                    const response = await fetch(url);
+                                    const jsonData = await response.json();
+                                    console.log(jsonData);
+                                    await addWay(jsonData.elements[0]);
+                                    console.log("way met id " + m.ref + " niet gevonden.");
                                 }
-                            rs[m.role].push(ps);
-                            } else {
-                                console.log("way met id " + m.ref + " niet gevonden.");
-                            }
                         }
                     }
                     let y = [rs.outer, rs.inner];
