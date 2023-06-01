@@ -38,8 +38,12 @@ async function addWay(x){
             // gesloten vlak
             var ps = [];
             for (const i of x.nodes){
-                let p = osm.nodes[i];
-                ps.push([p.getLatLng().lat, p.getLatLng().lng]);
+                if(i in osm.nodes){
+                    let p = osm.nodes[i];
+                    ps.push([p.getLatLng().lat, p.getLatLng().lng]);
+                } else {
+                    console.log("punt " + i + " niet aanwezig.")
+                }
             }
             let liw = L.polygon(ps, {color: 'red'});
             if(isPerceel(x)){liw.addTo(map);}
