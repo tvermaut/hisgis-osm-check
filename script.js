@@ -53,7 +53,8 @@ async function addWay(ref){
         let x = jsonData.elements[0]
         addWayWithData(x)
         }
-        return true
+
+    return true
 }
 
 async function addWayWithData(x){
@@ -98,10 +99,10 @@ async function verwerk(j){
         switch (x.type) {
             case 'node':
                 if(!(x.id in osm.nodes)) {
-                let lin = L.circleMarker(L.latLng(x.lat, x.lon), 10);
-                if(isPerceel(x)){lin.addTo(map);}
-                osm.nodes[x.id] = lin;
-                }
+                    let lin = L.circleMarker(L.latLng(x.lat, x.lon), 10);
+                    if(isPerceel(x)){lin.addTo(map);}
+                    osm.nodes[x.id] = lin;
+                    }
                 break;
             case 'way':
                 addWayWithData(x);
@@ -112,8 +113,7 @@ async function verwerk(j){
                     rs.outer = [];
                     rs.inner = [];
                     for (const m of x.members){
-                            let r = await addWay(m.ref);
-                            if(r){
+                            addWay(m.ref).then(function(){
                                 var w = osm.ways[m.ref]
                                 var ps = [];
                                 for (const p of w.getLatLngs()){
@@ -122,7 +122,7 @@ async function verwerk(j){
                                     ps.push(pis);
                                     }
                                 rs[m.role].push(ps);
-                            }
+                                });
                         }
                     let y = [rs.outer, rs.inner];
                     let lir = L.polygon(y.flat(), {color: 'purple'});
