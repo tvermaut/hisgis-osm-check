@@ -45,7 +45,18 @@ async function addNode(ref){
         return true
 }
 
-async function addWay(x){
+async function addWay(ref){
+    if(!(ref in osm.ways) ){
+        let url = "https://osm.hisgis.nl/api/0.6/way/" + ref + ".json";
+        const response = await fetch(url);
+        const jsonData = await response.json();
+        let x = jsonData.elements[0]
+        addWayWithData(x)
+        }
+        return true
+}
+
+async function addWayWithData(x){
     if(!(x.id in osm.ways) ){
         if(x.nodes[0] == x.nodes[x.nodes.length -1]){
             // gesloten vlak
@@ -93,7 +104,7 @@ async function verwerk(j){
                 }
                 break;
             case 'way':
-                addWay(x);
+                addWayWithData(x);
                 break;
             case 'relation':
                 if(!(x.id in osm.relations) && 'members' in x){
