@@ -96,7 +96,8 @@ async function verwerk(j){
                                 rs[m.role].push(ps);
                                 } else {
                                     // member-way niet aanwezig als lid van relatie; ophalen
-                                    let url = "https://osm.hisgis.nl/api/0.6/way/#" + m.ref + ".json";
+                                    let url = "https://osm.hisgis.nl/api/0.6/way/" + m.ref + ".json";
+                                    console.log(url)
                                     const response = await fetch(url);
                                     const jsonData = await response.json();
                                     console.log(jsonData);
