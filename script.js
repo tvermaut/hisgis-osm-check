@@ -117,7 +117,7 @@ async function verwerk(j){
                     const maakMulti = async () => {
                         for (const m of x.members){
                             console.log(m)
-                                addWay(m.ref).then(function(){
+                                await addWay(m.ref).then(function(){
                                     console.log("member " + m.ref + " toegevoegd.")
                                     var w = osm.ways[m.ref]
                                     var ps = [];
