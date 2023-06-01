@@ -129,8 +129,12 @@ async function verwerk(j){
                                     rs[m.role].push(ps);
                                     })
                             }
+                        console.log("multi klaar:")
+                        
                         let y = [rs.outer, rs.inner];
                         let lir = L.polygon(y.flat(), {color: 'purple'});
+                        console.log(lir)
+                        console.log(lir.toBBoxString())
                         if(isPerceel(x)){lir.addTo(map);}
                         osm.relations[x.id] = lir;
                         }
