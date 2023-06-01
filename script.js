@@ -32,6 +32,19 @@ function isPerceel(x){
     return 'tags' in x && ('kad:gemeente' in x.tags || 'kad:sectie' in x.tags || 'kad:perceelnr' in x.tags )
 }
 
+async function addNode(ref){
+    if(!(ref in osm.nodes) ){
+        let url = "https://osm.hisgis.nl/api/0.6/node/" + ref + ".json";
+        const response = await fetch(url);
+        const jsonData = await response.json();
+        let x = jsonData.elements[0]
+        let lin = L.circleMarker(L.latLng(x.lat, x.lon), 10);
+        if(isPerceel(x)){lin.addTo(map);}
+        osm.nodes[x.id] = lin;
+        }
+        return true
+}
+
 async function addWay(x){
     if(!(x.id in osm.ways) ){
         if(x.nodes[0] == x.nodes[x.nodes.length -1]){
@@ -42,7 +55,7 @@ async function addWay(x){
                     let p = osm.nodes[i];
                     ps.push([p.getLatLng().lat, p.getLatLng().lng]);
                 } else {
-                    console.log("punt " + i + " niet aanwezig.")
+                    addNode(i)
                 }
             }
             let liw = L.polygon(ps, {color: 'red'});
@@ -52,14 +65,19 @@ async function addWay(x){
             // open lijn
             var ps = [];
             for (const i of x.nodes){
-                let p = osm.nodes[i];
-                ps.push([p.getLatLng().lat, p.getLatLng().lng]);
+                if(i in osm.nodes){
+                    let p = osm.nodes[i];
+                    ps.push([p.getLatLng().lat, p.getLatLng().lng]);
+                } else {
+                    addNode(i);
+                }
             }
             let liw = L.polyline(ps, {color: 'green'});
             if(isPerceel(x)){liw.addTo(map);}
             osm.ways[x.id] = liw;
             }
         }
+        return true
 }
 
 async function verwerk(j){
@@ -83,33 +101,18 @@ async function verwerk(j){
                     rs.outer = [];
                     rs.inner = [];
                     for (const m of x.members){
-                        if(m.type=='way'){
-                                if(m.ref in osm.ways){
-                                    var ps = [];
-                                    var w = osm.ways[m.ref];
-                                    for (const p of w.getLatLngs()){
-                                        //let p = osm.nodes[i];
-                                        //console.log(i);
-                                        var pis = [];
-                                        //console.log(p);
-                                        for (const pi of p){
-                                        pis.push([pi.lat, pi.lng]);
-                                        }
-                                        ps.push(pis);
+                            let r = await addWay(m.ref);
+                            if(r){
+                                var w = osm.ways[m.ref]
+                                var ps = [];
+                                for (const p of w.getLatLngs()){
+                                    var pis = [];
+                                    for (const pi of p){pis.push([pi.lat, pi.lng]);}
+                                    ps.push(pis);
                                     }
                                 rs[m.role].push(ps);
-                                } else {
-                                    // member-way niet aanwezig als lid van relatie; ophalen
-                                    let url = "https://osm.hisgis.nl/api/0.6/way/" + m.ref + ".json";
-                                    console.log(url)
-                                    const response = await fetch(url);
-                                    const jsonData = await response.json();
-                                    console.log(jsonData);
-                                    await verwerk(jsonData);
-                                    console.log("way met id " + m.ref + " niet gevonden.");
-                                }
+                            }
                         }
-                    }
                     let y = [rs.outer, rs.inner];
                     let lir = L.polygon(y.flat(), {color: 'purple'});
                     if(isPerceel(x)){lir.addTo(map);}
