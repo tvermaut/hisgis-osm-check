@@ -29,7 +29,33 @@ var osm = new OSM()
 var jsonget;
 
 function isPerceel(x){
-    return 'tags' in x && 'kad:gemeente' in x.tags && 'kad:sectie' in x.tags
+    return 'tags' in x && ('kad:gemeente' in x.tags || 'kad:sectie' in x.tags || 'kad:perceelnr' in x.tags )
+}
+
+async function addWay(x){
+    if(!(x.id in osm.ways) ){
+        if(x.nodes[0] == x.nodes[x.nodes.length -1]){
+            // gesloten vlak
+            var ps = [];
+            for (const i of x.nodes){
+                let p = osm.nodes[i];
+                ps.push([p.getLatLng().lat, p.getLatLng().lng]);
+            }
+            let liw = L.polygon(ps, {color: 'red'});
+            if(isPerceel(x)){liw.addTo(map);}
+            osm.ways[x.id] = liw;
+        } else {
+            // open lijn
+            var ps = [];
+            for (const i of x.nodes){
+                let p = osm.nodes[i];
+                ps.push([p.getLatLng().lat, p.getLatLng().lng]);
+            }
+            let liw = L.polyline(ps, {color: 'green'});
+            if(isPerceel(x)){liw.addTo(map);}
+            osm.ways[x.id] = liw;
+            }
+        }
 }
 
 function verwerk(j){
@@ -45,29 +71,7 @@ function verwerk(j){
                 }
                 break;
             case 'way':
-                if(!(x.id in osm.ways) ){
-                    if(x.nodes[0] == x.nodes[x.nodes.length -1]){
-                        // gesloten vlak
-                        var ps = [];
-                        for (const i of x.nodes){
-                            let p = osm.nodes[i];
-                            ps.push([p.getLatLng().lat, p.getLatLng().lng]);
-                        }
-                        let liw = L.polygon(ps, {color: 'red'});
-                        if(isPerceel(x)){liw.addTo(map);}
-                        osm.ways[x.id] = liw;
-                    } else {
-                        // open lijn
-                        var ps = [];
-                        for (const i of x.nodes){
-                            let p = osm.nodes[i];
-                            ps.push([p.getLatLng().lat, p.getLatLng().lng]);
-                        }
-                        let liw = L.polyline(ps, {color: 'green'});
-                        if(isPerceel(x)){liw.addTo(map);}
-                        osm.ways[x.id] = liw;
-                        }
-                    }
+                addWay(x);
                 break;
             case 'relation':
                 if(!(x.id in osm.relations) && 'members' in x){
