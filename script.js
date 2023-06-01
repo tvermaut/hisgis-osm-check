@@ -18,9 +18,9 @@ document.getElementById("checkvenster").onclick = async function(){
 
 class OSM{
     constructor(){
-        this.nodes = [];
-        this.ways = [];
-        this.relations = [];
+        this.nodes = {};
+        this.ways = {};
+        this.relations = {};
         this.percelen = [];
     }
 }
