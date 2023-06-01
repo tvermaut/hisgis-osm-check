@@ -101,7 +101,7 @@ async function verwerk(j){
                                     const response = await fetch(url);
                                     const jsonData = await response.json();
                                     console.log(jsonData);
-                                    await addWay(jsonData.elements[0]);
+                                    await verwerk(jsonData);
                                     console.log("way met id " + m.ref + " niet gevonden.");
                                 }
                         }
