@@ -58,7 +58,7 @@ async function addWay(x){
         }
 }
 
-function verwerk(j){
+function async verwerk(j){
     console.log(j)
     jsonget = j;
     for (const x of j.elements){
