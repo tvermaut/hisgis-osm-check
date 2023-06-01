@@ -109,11 +109,15 @@ async function verwerk(j){
                 break;
             case 'relation':
                 if(!(x.id in osm.relations) && 'members' in x){
+                    console.log("nieuwe relatie r"+x.id)
+                    console.log(x)
                     rs = {};
                     rs.outer = [];
                     rs.inner = [];
                     for (const m of x.members){
+                        console.log(m)
                             addWay(m.ref).then(function(){
+                                console.log("member " + m.ref + " toegevoegd.")
                                 var w = osm.ways[m.ref]
                                 var ps = [];
                                 for (const p of w.getLatLngs()){
