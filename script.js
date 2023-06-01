@@ -114,26 +114,27 @@ async function verwerk(j){
                     rs = {};
                     rs.outer = [];
                     rs.inner = [];
-                    for (const m of x.members){
-                        console.log(m)
-                            addWay(m.ref).then(function(){
-                                console.log("member " + m.ref + " toegevoegd.")
-                                var w = osm.ways[m.ref]
-                                var ps = [];
-                                for (const p of w.getLatLngs()){
-                                    var pis = [];
-                                    for (const pi of p){pis.push([pi.lat, pi.lng]);}
-                                    ps.push(pis);
-                                    }
-                                rs[m.role].push(ps);
-                                });
+                    const maakMulti = async () => {
+                        for (const m of x.members){
+                            console.log(m)
+                                addWay(m.ref).then(function(){
+                                    console.log("member " + m.ref + " toegevoegd.")
+                                    var w = osm.ways[m.ref]
+                                    var ps = [];
+                                    for (const p of w.getLatLngs()){
+                                        var pis = [];
+                                        for (const pi of p){pis.push([pi.lat, pi.lng]);}
+                                        ps.push(pis);
+                                        }
+                                    rs[m.role].push(ps);
+                                    })
+                            }
+                        let y = [rs.outer, rs.inner];
+                        let lir = L.polygon(y.flat(), {color: 'purple'});
+                        if(isPerceel(x)){lir.addTo(map);}
+                        osm.relations[x.id] = lir;
                         }
-                    let y = [rs.outer, rs.inner];
-                    let lir = L.polygon(y.flat(), {color: 'purple'});
-                    if(isPerceel(x)){lir.addTo(map);}
-                    osm.relations[x.id] = lir;
                 }
-
                 break;
             default:
                 break;
