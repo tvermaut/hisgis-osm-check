@@ -71,7 +71,10 @@ async function addWayWithData(x){
                 }
             }
             let liw = L.polygon(ps, {color: 'red'});
-            if(isPerceel(x)){liw.addTo(map);}
+            if(isPerceel(x)){
+                liw.addTo(map);
+                console.log(x);
+                }
             osm.ways[x.id] = liw;
         } else {
             // open lijn
