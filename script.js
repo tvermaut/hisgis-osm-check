@@ -73,7 +73,22 @@ async function addWayWithData(x){
             let liw = L.polygon(ps, {color: 'red'});
             if(isPerceel(x)){
                 liw.addTo(map);
-                console.log(x);
+                if('tags' in x){
+                    if('kad:gemeente' in x['tags']){
+                        if('kad:sectie' in x['tags']){
+                            if('kad:perceelnr' in x['tags']){
+                                var pnr = x['tags']['kad:perceelnr']
+                                if('kad:perceelnrtvg' in x['tags']){
+                                    pnr += '/' + x['tags']['kad:perceelnrtvg']
+                                }
+                                let gemeente = x['tags']['kad:gemeente']
+                                let sectie = x['tags']['kad:sectie']
+                                osm.percelen[gemeente] = {sectie: {pnr: liw}}
+                            }
+                        }
+                    }
+                }
+                //console.log(x);
                 }
             osm.ways[x.id] = liw;
         } else {
