@@ -83,7 +83,10 @@ async function addWayWithData(x){
                                 }
                                 let gemeente = x['tags']['kad:gemeente']
                                 let sectie = x['tags']['kad:sectie']
-                                osm.percelen[gemeente] = {sectie: {pnr: liw}}
+                                if(!(gemeente in osm.percelen)){osm.percelen[gemeente] = {};}
+                                if(!(sectie in osm.percelen[gemeente])){osm.percelen[gemeente][sectie] = {};}
+                                if(!(pnr in osm.percelen[gemeente][sectie])){osm.percelen[gemeente][sectie][pnr] = []};
+                                osm.percelen[gemeente][sectie][pnr].push(liw);
                             }
                         }
                     }
